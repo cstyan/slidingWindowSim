@@ -25,8 +25,8 @@ end
 
 #get a port isntead of defining it
 puts "Enter the port #:"
-port = gets.chomp
-port = port.to_i
+port = gets.chomp.to_i
+
 
 client = UDPSocket.new
 puts "Enter the network IP:"
