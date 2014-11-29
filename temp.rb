@@ -60,6 +60,7 @@ while(run == 1)
             sendPacket(client, port, packet, networkIP)
         end
     elsif(state.to_i == 2)
+        client.bind('', port.to_i)
         while(continue == 1)
             packet = getPacket(client)
             puts packet.data
