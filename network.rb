@@ -13,5 +13,5 @@ run = 1
 while(run == 1)
 	packet = getPacket(network_1)
 	puts packet.data
-	sendPacket(network_1, port, makePacket(packet.dest_ip, 2, 0, 0, 0, packet.data))
+	sendPacket(network_1, port, makePacket(packet.destIP, 2, 0, 0, 0, packet.data))
 end
