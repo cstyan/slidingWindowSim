@@ -1,20 +1,5 @@
 load 'packet.rb'
 
-#get a port isntead of defining it
-puts "Enter the port #:"
-port = gets.chomp
-
-client = UDPSocket.new
-puts "Enter the network IP:"
-networkIP = gets.chomp
-client.connect(networkIP, port)
-
-puts "Enter the window size:"
-winSize = gets.chomp
-
-#global queue for the window
-$window = Queue.new
-
 #generate the initial window
 def genWindow(initNum, windowSize, destIP)
     i = 1
@@ -37,6 +22,23 @@ end
 def receive
 
 end
+
+#get a port isntead of defining it
+puts "Enter the port #:"
+port = gets.chomp
+port = port.to_i
+
+client = UDPSocket.new
+puts "Enter the network IP:"
+networkIP = gets.chomp
+client.connect(networkIP, port)
+
+puts "Enter the window size:"
+winSize = gets.chomp
+
+#global queue for the window
+$window = Queue.new
+
 
 
 #main script
