@@ -63,7 +63,7 @@ while(run == 1)
         recv = UDPSocket.new
         recv.bind('', port.to_i)
         while(continue == 1)
-            packet = getPacket(client)
+            packet = getPacket(recv)
             puts packet.data
         end
     else
