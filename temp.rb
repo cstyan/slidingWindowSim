@@ -57,7 +57,7 @@ while(run == 1)
             num = gets.chomp
             packet = makePacket(ip, 1, 1, 1)
             #pass the port here
-            sendPacket(client, networkIP, port, packet)
+            sendPacket(client, port, packet, networkIP)
         end
     elsif(state.to_i == 2)
         while(continue == 1)
