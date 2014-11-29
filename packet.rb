@@ -49,7 +49,7 @@ end
 
 def sendPacket(socket, port, packet, *networkIP)
     if(networkIP.size == 0)
-        socket.send(packet, 0, packet.dest_ip.to_s, port)
+        socket.send(packet, 0, packet.destIP.to_s, port)
     else
         socket.send(packet, 0, networkIP[0], port)
     end
