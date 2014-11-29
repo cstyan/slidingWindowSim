@@ -53,7 +53,7 @@ while(run == 1)
         while(continue == 1)
             puts "Enter the # of packets you would like to send:"
             num = gets.chomp
-            packet = makePacket(ip, 1, 1, 1, 1)
+            packet = makePacket(ip, 1, 1, 1)
             #pass the port here
             sendPacket(client, networkIP, port, packet)
         end
