@@ -22,8 +22,8 @@ def genWindow(initNum, windowSize, destIP)
     while(i <= windowSize)
         packet = makePacket(destIP, 1, seqNum, 0)
         $window.push(packet)
-        seqNum++
-        i++
+        seqNum += 1
+        i += 1
     end
     return seqNum
 end
