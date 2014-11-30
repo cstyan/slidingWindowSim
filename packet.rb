@@ -32,6 +32,7 @@ def makePacket(destIP, sourceIP, type, seqNum, ackNum)
 	packet.type = type
 	packet.seqNum = seqNum
 	packet.ackNum = ackNum
+	puts "test"
 	if(type == 0)
 		packet.data = "This is ack #{ackNum}"
 	elsif(type == 1)
