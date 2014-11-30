@@ -41,13 +41,10 @@ def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSi
     i = 0
     while i < $window.size
         packet = $window[i]
-	puts $socket
-	puts $port
-	puts $localIP
-	puts destIP
-	puts networkIP
         sendPacket($socket, $port, makePacket(destIP, $localIP, 1, 0, 0), networkIP)
+    	i += 1
     end
+    puts "sent a window"
     packetsAcked = tx2(windowSize, destIP, currentSequenceNum)
     return packetsAcked
 end
@@ -62,7 +59,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
     while i < numLoop
         #we expect to receive the ACK for the seqNum at the front of the queue
         expectedAck = $window[0].seqNum
-        recvd = getPacket($recv)
+        recvd = getPacket($socket)
         packet = recvd[0]
         #if the packet is an ack and the ackNum is the ack we're expecting
         if(packet.type == 0 && packet.ackNum == expectedAck) 
@@ -103,7 +100,7 @@ end
 # end
 
 #is this function necessary?
-def receive(recvIP, networkIP, socket, port)
+def receive(recvIP, networkIP, socketA, port)
     run = 1
     while run == 1
         #read a packet from the socket
