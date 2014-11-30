@@ -168,7 +168,7 @@ while(run == 1)
             valid = 1
         end
 
-        transmit($socket, num, winSize, ip, networkIP, port)
+        transmit($socket, num, $windowSize, $clientIP, $networkIP, $port)
         # while(continue == 1)
         #     puts "Enter the # of packets you would like to send:"
         #     num = gets.chomp
