@@ -122,7 +122,7 @@ def setup
     puts "Please enter the client IP:"
     $clientIP = gets.chomp
     $sOut.connect($networkIP, $portOut)
-    $sIn.bind($networkIP, $portIn)
+    $sIn.bind('', $portIn)
 end
 
 #get a port isntead of defining it
