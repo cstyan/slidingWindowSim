@@ -98,7 +98,7 @@ def receive(recvIP, networkIP, socket, port)
     while run == 1
         #read a packet from the socket
         #rx1
-        packet = getPacket($recv)
+        packet = getPacket($socket)
         if packet.type = 2
             run = 2
             next
