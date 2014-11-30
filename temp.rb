@@ -86,7 +86,8 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
 
     currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
     while ((packetsSent = tx1(socket, port, destIP, networkIP, currentSequenceNum, numPackets, windowSize)) < numPackets)
-        puts "ok"
+        puts "Num packet #{numPackets}"
+        puts "Packets sent #{packetsSent}"
     end
     #send eot
     #sendPacket(socket, port, makePacket(destIP, 2, 0, 0), networkIP)
@@ -127,10 +128,6 @@ def setup
     $windowSize = gets.chomp.to_i
     puts "Enter a port:"
     $port = gets.chomp.to_i
-    # puts "Enter the outgoing port #:"
-    # $portOut = gets.chomp.to_i
-    # puts "Enter the incomming port #:"
-    # $portIn = gets.chomp.to_i
     puts "Please enter network IP:"
     $networkIP = gets.chomp
     puts "Please enter the client IP:"
@@ -138,21 +135,6 @@ def setup
     $socket.bind('', $port)
     $socket.connect($networkIP, $port)
 end
-
-#get a port isntead of defining it
-# puts "Enter the port #:"
-# port = gets.chomp
-
-
-# client = UDPSocket.new
-# puts "Enter the network IP:"
-# networkIP = gets.chomp
-# client.connect(networkIP, port)
-
-# puts "Enter the window size:"
-# winSize = gets.chomp
-
-
 
 setup
 
@@ -165,9 +147,6 @@ while(run == 1)
     state = gets.chomp
     
     if(state.to_i == 1)
-        # puts "Input the IP you would like to send to:"
-        # ip = gets.chomp
-        # $recv.bind(ip, port.to_i)
         valid = 0
         num = 0
         while(valid == 0)
@@ -178,23 +157,8 @@ while(run == 1)
             end
             valid = 1
         end
-
         transmit($socket, num, $windowSize, $clientIP, $networkIP, $port)
-        # while(continue == 1)
-        #     puts "Enter the # of packets you would like to send:"
-        #     num = gets.chomp
-        #     packet = makePacket(ip, 1, 1, 1)
-        #     #pass the port here
-        #     sendPacket(client, port, packet, networkIP)
-        # end
     elsif(state.to_i == 2)
-        # $recv.bind('', port.to_i)
-        # puts "Input the IP you want to receive"
-        # recvIP = gets.chomp
-        # while(continue == 1)
-        #     packet = getPacket($recv)
-        #     puts packet.data
-        # end
         receive($clientIP, $networkIP, $socket, $port)
     else
         next
