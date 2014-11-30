@@ -29,7 +29,7 @@ def genWindow(initNum, windowSize, destIP)
         $window.push(packet)
         seqNum += 1
         i += 1
-        puts $window[i]
+        puts $window[i].data
     end
     return seqNum + 1
 end
@@ -165,7 +165,7 @@ while(run == 1)
         while(valid == 0)
             puts "Enter the number of packets you want to send"
             num = gets.chomp.to_i
-            if(num < $windowSize)
+            if(num > $windowSize)
                 next
             end
             valid = 1
