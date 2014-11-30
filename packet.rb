@@ -4,6 +4,7 @@ require 'bit-struct'
 # Packet Structure
 class Packet < BitStruct
 	octets		:destIP,	32
+	octets      :sourceIP,  32
 	unsigned	:type,		2
 	unsigned	:seqNum,	16
 	unsigned	:ackNum,	16
@@ -13,6 +14,8 @@ end
 # ==============================================================
 # makePacket - Creates a Packet structure and fill it with data
 # Takes in the following values:
+# destIP - IP address of the destination host
+# sourceIP - IP address of the source host
 # type - int value between 0 and 2 (0 = ack, 1 = data, 2 = EOT)
 # seqNum - Sequence Number
 # ackNum - Acknowledgement Number
@@ -21,10 +24,11 @@ end
 # returns a Packet struct
 # ==============================================================
 
-def makePacket(destIP, type, seqNum, ackNum)
+def makePacket(destIP, sourceIP, type, seqNum, ackNum)
 	packet = Packet.new
 
 	packet.destIP = destIP
+	packet.sourceIP = sourceIP
 	packet.type = type
 	packet.seqNum = seqNum
 	packet.ackNum = ackNum
