@@ -63,7 +63,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
         puts "packet recv'd"
         #if the packet is an ack and the ackNum is the ack we're expecting
         if(packet.type == 0 && packet.ackNum == expectedAck) 
-            lastSeqNum = window 
+            lastSeqNum = $window.[0].seqNum
             $window.shift
             newPacket = makePacket(destIP, $localIP, 1, currentSequenceNum, 0)
             puts "Pushing packet num #{currentSequenceNum} to the queue"
