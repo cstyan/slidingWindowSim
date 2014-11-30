@@ -115,7 +115,7 @@ def setup
     puts "Enter the window size:"
     $windowSize = gets.chomp.to_i
     puts "Enter a port:"
-    $port = get.chomp.to_i
+    $port = gets.chomp.to_i
     # puts "Enter the outgoing port #:"
     # $portOut = gets.chomp.to_i
     # puts "Enter the incomming port #:"
