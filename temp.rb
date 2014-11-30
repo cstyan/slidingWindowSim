@@ -59,9 +59,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
     while i < numLoop
         #we expect to receive the ACK for the seqNum at the front of the queue
         expectedAck = $window[0].seqNum
-        recvd = getPacket($socket)
-        packet = recvd[0]
-        puts packet
+        packet = getPacket($socket)
         puts "packet recv'd"
         #if the packet is an ack and the ackNum is the ack we're expecting
         if(packet.type == 0 && packet.ackNum == expectedAck) 
