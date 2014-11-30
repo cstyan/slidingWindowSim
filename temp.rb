@@ -29,6 +29,7 @@ def genWindow(initNum, windowSize, destIP)
         $window.push(packet)
         seqNum += 1
         i += 1
+        puts $window[i]
     end
     return seqNum + 1
 end
