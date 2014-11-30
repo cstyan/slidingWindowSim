@@ -82,10 +82,10 @@ def tx2(windowSize, destIP, currentSequenceNum)
                 end
             #if recv ack we expect, window.shift and push new packet to end
             end
-        rescue Timeout::Error
-            puts "Timed out!"
-            return acks
         end
+    rescue Timeout::Error
+        puts "Timed out!"
+        return acks
     end
     return acks
 end
