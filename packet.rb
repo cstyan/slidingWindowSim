@@ -28,7 +28,14 @@ def makePacket(destIP, type, seqNum, ackNum)
 	packet.type = type
 	packet.seqNum = seqNum
 	packet.ackNum = ackNum
-	packet.data = "This is packet #{seqNum}"
+	if(type = 0)
+		packet.data = "This is ack #{ackNum}"
+	elsif(type = 1)
+		packet.data = "This is packet #{seqNum}"
+	else
+		packet.data = "This is an EOT"
+	end
+		
 
 	return packet
 end
