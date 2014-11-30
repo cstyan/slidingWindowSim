@@ -162,7 +162,7 @@ while(run == 1)
         while(valid == 0)
             puts "Enter the number of packets you want to send"
             num = gets.chomp
-            if(num < winSize)
+            if(num < $windowSize)
                 next
             end
             valid = 1
