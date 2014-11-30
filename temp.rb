@@ -60,32 +60,32 @@ def tx2(windowSize, destIP, currentSequenceNum)
     if($window.size < windowSize)
         numLoop = $window.size
     end
-    while i < numLoop
-        #we expect to receive the ACK for the seqNum at the front of the queue
-        expectedAck = $window[0].seqNum
-        begin
-            timeout(5) do
+    begin 
+        timeout(0.5) do   
+            while i < numLoop
+                #we expect to receive the ACK for the seqNum at the front of the queue
+                expectedAck = $window[0].seqNum
                 packet = getPacket($socket)
+                i += 1
+                puts "packet recv'd"
+                #if the packet is an ack and the ackNum is the ack we're expecting
+                puts "Expected ACK: #{expectedAck}"
+                puts "Packet ACK: #{packet.ackNum}"
+                if(packet.type == 0 && packet.ackNum == expectedAck) 
+                    lastSeqNum = $window[0].seqNum
+                    $window.shift
+                    newPacket = makePacket(destIP, $localIP, 1, currentSequenceNum, 0)
+                    puts "Pushing packet num #{currentSequenceNum} to the queue"
+                    currentSequenceNum += 1
+                    acks += 1
+                    $window.push(newPacket)
+                end
+            #if recv ack we expect, window.shift and push new packet to end
             end
         rescue Timeout::Error
             puts "Timed out!"
             return acks
         end
-        i += 1
-        puts "packet recv'd"
-        #if the packet is an ack and the ackNum is the ack we're expecting
-        puts "Expected ACK: #{expectedAck}"
-        puts "Packet ACK: #{packet.ackNum}"
-        if(packet.type == 0 && packet.ackNum == expectedAck) 
-            lastSeqNum = $window[0].seqNum
-            $window.shift
-            newPacket = makePacket(destIP, $localIP, 1, currentSequenceNum, 0)
-            puts "Pushing packet num #{currentSequenceNum} to the queue"
-            currentSequenceNum += 1
-            acks += 1
-            $window.push(newPacket)
-        end
-    #if recv ack we expect, window.shift and push new packet to end
     end
     return acks
 end
