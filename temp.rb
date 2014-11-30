@@ -161,7 +161,7 @@ while(run == 1)
         num = 0
         while(valid == 0)
             puts "Enter the number of packets you want to send"
-            num = gets.chomp
+            num = gets.chomp.to_i
             if(num < $windowSize)
                 next
             end
