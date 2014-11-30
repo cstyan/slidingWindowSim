@@ -40,13 +40,13 @@ end
 #sends our entire current window
 def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSize)
     i = 0
+    puts "Sending window #{$window[0].seqNum} to #{$window[$windowSize - 1].seqNum}"
     while i < $window.size
         packet = $window[i]
         # sendPacket($socket, $port, makePacket(destIP, $localIP, 1, 0, 0), networkIP)
     	sendPacket($socket, $port, $window[i], networkIP)
         i += 1
     end
-    puts "sent a window"
     packetsAcked = tx2(windowSize, destIP, currentSequenceNum)
     return packetsAcked
 end
@@ -67,10 +67,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
                 expectedAck = $window[0].seqNum
                 packet = getPacket($socket)
                 i += 1
-                puts "packet recv'd"
                 #if the packet is an ack and the ackNum is the ack we're expecting
-                puts "Expected ACK: #{expectedAck}"
-                puts "Packet ACK: #{packet.ackNum}"
                 if(packet.type == 0 && packet.ackNum == expectedAck) 
                     lastSeqNum = $window[0].seqNum
                     $window.shift
@@ -99,8 +96,6 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
 
     currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
     while ((packetsSent = tx1(socket, port, destIP, networkIP, currentSequenceNum, numPackets, windowSize)) < numPackets)
-        puts "Num packet #{numPackets}"
-        puts "Packets sent #{packetsSent}"
     end
     #send eot
     #sendPacket(socket, port, makePacket(destIP, 2, 0, 0), networkIP)
