@@ -16,6 +16,8 @@ $port
 $networkIP
 #IP address of the other client
 $clientIP
+#outgoing IP of the local machine
+$localIP = UDPSocket.open{|s| s.connect("64.233.187.99", 1); s.addr.last}
 
 
 #generate the initial window
@@ -23,7 +25,7 @@ def genWindow(initNum, windowSize, destIP)
     i = 1
     seqNum = initNum
     while(i <= windowSize.to_i)
-        packet = makePacket(destIP, 1, seqNum, 0)
+        packet = makePacket(destIP, $localIP, 1, seqNum, 0)
         $window.push(packet)
         seqNum += 1
         i += 1
