@@ -61,6 +61,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
         expectedAck = $window[0].seqNum
         recvd = getPacket($socket)
         packet = recvd[0]
+        puts packet
         puts "packet recv'd"
         #if the packet is an ack and the ackNum is the ack we're expecting
         if(packet.type == 0 && packet.ackNum == expectedAck) 
