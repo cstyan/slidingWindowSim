@@ -6,10 +6,11 @@ load 'packet.rb'
 #technically it's an array because you can't
 #access queue elements using array.[num]
 $window = Array.new
-#socket for receiving
-$sIn = UDPSocket.new
-#socket for sending
-$sOut = UDPSocket.new
+#socket for sending/receiving
+$socket = UDPSocket.new
+# $sIn = UDPSocket.new
+# #socket for sending
+# $sOut = UDPSocket.new
 $windowSize
 $port
 $networkIP
@@ -113,16 +114,18 @@ def setup
     puts "Setup, please configure the application accordingly."
     puts "Enter the window size:"
     $windowSize = gets.chomp.to_i
-    puts "Enter the outgoing port #:"
-    $portOut = gets.chomp.to_i
-    puts "Enter the incomming port #:"
-    $portIn = gets.chomp.to_i
+    puts "Enter a port:"
+    $port = get.chomp.to_i
+    # puts "Enter the outgoing port #:"
+    # $portOut = gets.chomp.to_i
+    # puts "Enter the incomming port #:"
+    # $portIn = gets.chomp.to_i
     puts "Please enter network IP:"
     $networkIP = gets.chomp
     puts "Please enter the client IP:"
     $clientIP = gets.chomp
-    $sOut.connect($networkIP, $portOut)
-    $sIn.bind('', $portIn)
+    $socket.bind('', $port)
+    $socket.connect($networkIP, $port)
 end
 
 #get a port isntead of defining it
@@ -165,7 +168,7 @@ while(run == 1)
             valid = 1
         end
 
-        transmit(client, num, winSize, ip, networkIP, port)
+        transmit(socket, num, winSize, ip, networkIP, port)
         # while(continue == 1)
         #     puts "Enter the # of packets you would like to send:"
         #     num = gets.chomp
