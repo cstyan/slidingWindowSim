@@ -86,7 +86,7 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
         puts "ok"
     end
     #send eot
-    sendPacket(socket, port, makePacket(destIP, 2, 0, 0), networkIP)
+    #sendPacket(socket, port, makePacket(destIP, 2, 0, 0), networkIP)
 end
 
 #frame recv'd
@@ -107,7 +107,7 @@ def receive(recvIP, networkIP, socketA, port)
         #rx1
         packet = getPacket($socket)
         if packet.type = 2
-            run = 2
+            run = 0
             next
         end
         #rx2
