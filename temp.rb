@@ -54,6 +54,7 @@ end
 def tx2(windowSize, destIP, currentSequenceNum)
     #wait for acks in seq
     i = 1
+    acks = 0
     numLoop = windowSize
     packet = Packet.new
     if($window.size < windowSize)
@@ -68,6 +69,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
             end
         rescue Timeout::Error
             puts "Timed out!"
+            return acks
         end
         i += 1
         puts "packet recv'd"
@@ -80,10 +82,12 @@ def tx2(windowSize, destIP, currentSequenceNum)
             newPacket = makePacket(destIP, $localIP, 1, currentSequenceNum, 0)
             puts "Pushing packet num #{currentSequenceNum} to the queue"
             currentSequenceNum += 1
+            acks += 1
             $window.push(newPacket)
         end
     #if recv ack we expect, window.shift and push new packet to end
     end
+    return acks
 end
 
 def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
