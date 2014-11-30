@@ -62,6 +62,8 @@ def tx2(windowSize, destIP, currentSequenceNum)
         packet = getPacket($socket)
         puts "packet recv'd"
         #if the packet is an ack and the ackNum is the ack we're expecting
+        puts "Expected ACK: #{expectedAck}"
+        puts "Packet ACK: #{packet.ackNum}"
         if(packet.type == 0 && packet.ackNum == expectedAck) 
             lastSeqNum = $window[0].seqNum
             $window.shift
