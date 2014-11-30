@@ -42,7 +42,7 @@ def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSi
     while i < $window.size
         packet = $window[i]
 	puts $socket
-	puts $port
+	puts $portOut
 	puts $localIP
 	puts destIP
 	puts networkIP
