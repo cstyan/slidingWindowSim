@@ -1,4 +1,5 @@
 load 'packet.rb'
+require 'timeout'
 
 #get port instead of defining it
 $portIn
@@ -25,7 +26,13 @@ while(run == 1)
 	packet = getPacket(network_1)
 	puts packet.data
 	if(randomNum > $pktpct)
-		sendPacket(network_1, $port, packet)
+		begin
+			timeout(0.05) do
+				sendPacket(network_1, $port, packet)
+			end
+		rescue Timeout::Error
+			puts "Timed out"
+		end
 	else
 		puts "Packet dropped"
 	end
