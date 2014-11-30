@@ -184,7 +184,8 @@ while(run == 1)
         #     packet = getPacket($recv)
         #     puts packet.data
         # end
-        receive(recvIP, networkIP, $recv, port)
+        receive()
+        receive($clientIP, $networkIP, $socket, $port)
     else
         next
     end
