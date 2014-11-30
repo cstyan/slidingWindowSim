@@ -38,7 +38,7 @@ def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSi
     i = 0
     while i < $window.size
         packet = $window[i]
-        sendPacket(socket, port, packet, networkIP)
+        sendPacket($sock, $portOut, packet, networkIP)
     end
     packetsAcked = tx2(windowSize, destIP, currentSequenceNum)
     return packetsAcked
