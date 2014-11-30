@@ -55,6 +55,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
     #wait for acks in seq
     i = 1
     numLoop = windowSize
+    packet = Packet.new
     if($window.size < windowSize)
         numLoop = $window.size
     end

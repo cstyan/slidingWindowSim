@@ -1,5 +1,4 @@
 load 'packet.rb'
-require 'timeout'
 
 #get port instead of defining it
 puts "Port:"
