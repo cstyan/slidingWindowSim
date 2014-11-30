@@ -1,4 +1,5 @@
 load 'packet.rb'
+require 'timeout'
 
 # ---Globals, cause they're cool---
 
