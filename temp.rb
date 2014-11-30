@@ -65,7 +65,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
         if(packet.type == 0 && packet.ackNum == expectedAck) 
             lastSeqNum = window 
             $window.shift
-            newPacket = makePacket(destIP, 1, currentSequenceNum, 0)
+            newPacket = makePacket(destIP, $localIP, 1, currentSequenceNum, 0)
             puts "Pushing packet num #{currentSequenceNum} to the queue"
             currentSequenceNum += 1
             $windowSize.push(newPacket)
