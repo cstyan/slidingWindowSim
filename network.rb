@@ -21,5 +21,6 @@ while(run == 1)
 	#I am an idiot, don't make new packet
 	packet = getPacket(network_1)
 	puts packet.data
-	sendPacket(network_1, $port, makePacket(packet.destIP, 2, 0, 1))
+	sendPacket(network_1, $port, packet)
+	# sendPacket(network_1, $port, makePacket(packet.destIP, 2, 0, 1))
 end
