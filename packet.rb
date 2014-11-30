@@ -28,9 +28,9 @@ def makePacket(destIP, type, seqNum, ackNum)
 	packet.type = type
 	packet.seqNum = seqNum
 	packet.ackNum = ackNum
-	if(type = 0)
+	if(type == 0)
 		packet.data = "This is ack #{ackNum}"
-	elsif(type = 1)
+	elsif(type == 1)
 		packet.data = "This is packet #{seqNum}"
 	else
 		packet.data = "This is an EOT"
@@ -54,6 +54,8 @@ def getPacket(socket)
 	return packet
 end
 
+#if the array networkIP is empty then it calls
+#a different version of the send function
 def sendPacket(socket, port, packet, *networkIP)
     if(networkIP.size == 0)
         socket.send(packet, 0, packet.destIP.to_s, port)
