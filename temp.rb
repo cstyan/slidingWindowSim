@@ -46,6 +46,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
             $windowSize.push(newPacket)
         end
     #if recv ack we expect, window.shift and push new packet to end
+    end
 end
 
 def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
@@ -56,8 +57,8 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     initialSequenceNum = 0
 
     currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
-
     while ((packetsSent = tx1(client, port, destIP, networkIP, currentSequenceNum, numPackets, windowSize)) < numPackets)
+        puts "ok"
     end
     #send eot
     sendPacket(socket, port, makePacket(destIP, 2, 0, 0), networkIP)
@@ -87,6 +88,7 @@ def receive(recvIP, networkIP, socket, port)
         #rx2
         #validate packet
         sendPacket(socket, port, makePacket(recvIP, 0, 0, packet.seqNum), networkIP)
+    end
 end
 
 #get a port isntead of defining it
@@ -153,7 +155,7 @@ while(run == 1)
         # end
         receive(recvIP, networkIP, $recv, port)
     else
-
+        next
     end
 end
 
