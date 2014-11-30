@@ -24,7 +24,7 @@ while(run == 1)
 	randomNum = rand(100)
 	packet = getPacket(network_1)
 	puts packet.data
-	if(randomNum > pktpct)
+	if(randomNum > $pktpct)
 		sendPacket(network_1, $port, packet)
 	else
 		puts "Packet dropped"
