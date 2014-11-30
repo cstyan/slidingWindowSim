@@ -106,13 +106,14 @@ def receive(recvIP, networkIP, socketA, port)
         #read a packet from the socket
         #rx1
         packet = getPacket($socket)
-        if packet.type = 2
-            run = 0
-            next
-        end
+        # if packet.type = 2
+        #     run = 0
+        #     next
+        # end
         #rx2
         #validate packet
         sendPacket(socket, port, makePacket(recvIP, 0, 0, packet.seqNum), networkIP)
+        puts "sent an ACK"
     end
     puts "EOT received, ending receive function"
 end
