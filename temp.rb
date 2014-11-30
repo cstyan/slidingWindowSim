@@ -61,8 +61,13 @@ def tx2(windowSize, destIP, currentSequenceNum)
     while i < numLoop
         #we expect to receive the ACK for the seqNum at the front of the queue
         expectedAck = $window[0].seqNum
-        timeout(0.1)
-        packet = getPacket($socket)
+        begin
+            timeout(5) do
+                packet = getPacket($socket)
+            end
+        rescue Timeout::Error
+            puts "Timed out!"
+        end
         i += 1
         puts "packet recv'd"
         #if the packet is an ack and the ackNum is the ack we're expecting
