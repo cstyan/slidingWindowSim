@@ -23,6 +23,7 @@
 #----------------------------------------------------------------------------*/
 
 load 'packet.rb'
+require 'logger'
 
 puts "Port: "
 $port = gets.chomp.to_i

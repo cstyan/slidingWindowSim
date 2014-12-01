@@ -23,6 +23,7 @@
 
 load 'packet.rb'
 require 'timeout'
+require 'logger'
 
 #queue for the window
 #technically it's an array because you can't
