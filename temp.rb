@@ -19,7 +19,7 @@ $networkIP
 $clientIP
 #outgoing IP of the local machine
 $localIP = UDPSocket.open{|s| s.connect("64.233.187.99", 1); s.addr.last}
-
+$numPackets = 0
 $currentSequenceNum = 0
 
 
@@ -73,11 +73,13 @@ def tx2(windowSize, destIP, currentSequenceNum)
                 if(packet.type == 0 && packet.ackNum == expectedAck) 
                     lastSeqNum = $window[0].seqNum
                     $window.shift
-                    newPacket = makePacket(destIP, $localIP, 1, $currentSequenceNum, 0)
-                    puts "Pushing packet num #{$currentSequenceNum} to the queue"
-                    $currentSequenceNum += 1
-                    acks += 1
-                    $window.push(newPacket)
+                    if($currentSequenceNum != $numPackets)
+                        newPacket = makePacket(destIP, $localIP, 1, $currentSequenceNum, 0)
+                        puts "Pushing packet num #{$currentSequenceNum} to the queue"
+                        $currentSequenceNum += 1
+                        acks += 1
+                        $window.push(newPacket)
+                    end
                 end
             #if recv ack we expect, window.shift and push new packet to end
             end
@@ -99,8 +101,8 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     $currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
     # while ((packetsSent = tx1(socket, port, destIP, networkIP, $currentSequenceNum, numPackets, windowSize)) < numPackets)
     # end
-    while($window.size != 0 && $currentSequenceNum != numPackets)
-        tx1(socket, port, destIP, networkIP, $currentSequenceNum, numPackets, windowSize)
+    while($window.size != 0 && $currentSequenceNum != $numPackets)
+        tx1(socket, port, destIP, networkIP, $currentSequenceNum, $numPackets, windowSize)
     end
     #send eot
     puts "Sending EOT"
@@ -165,13 +167,13 @@ while(run == 1)
         num = 0
         while(valid == 0)
             puts "Enter the number of packets you want to send"
-            num = gets.chomp.to_i
-            if(num < $windowSize)
+            $numPackets = gets.chomp.to_i
+            if($numPackets < $windowSize)
                 next
             end
             valid = 1
         end
-        transmit($socket, num, $windowSize, $clientIP, $networkIP, $port)
+        transmit($socket, $numPackets, $windowSize, $clientIP, $networkIP, $port)
     elsif(state.to_i == 2)
         receive($clientIP, $networkIP, $socket, $port)
     else
