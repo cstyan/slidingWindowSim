@@ -192,6 +192,8 @@ def receive(recvIP, networkIP, socketA, port)
                 timeout(10) do
                     packet = getPacket($socket)
                     if(packet.type == 2)
+                        return
+                    end
                 end
             rescue Timeout::Error
                 puts "Timed out!"
