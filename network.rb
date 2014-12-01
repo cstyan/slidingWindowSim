@@ -44,7 +44,7 @@ while(run == 1)
 	randomNum = rand(100)
 	packet = getPacket(network_1)
 	if(randomNum > $pktpct)
-		sleep (0.05)
+		#sleep (0.05)
 		sendPacket(network_1, $port, packet)
 
 		if(packet.type = 1)
