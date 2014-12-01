@@ -191,7 +191,7 @@ def receive(recvIP, networkIP, socketA, port)
             begin
                 timeout(10) do
                     packet = getPacket($socket)
-                    if(packet.type == 1)
+                    if(packet.type == 2)
                         return
                     end
                 end
