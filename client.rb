@@ -112,10 +112,10 @@ def tx2(windowSize, destIP, currentSequenceNum)
     if($window.size < windowSize)
         numLoop = $window.size
     end
-    begin 
-        timeout(0.5) do   
-            while i < numLoop
-                expectedAck = $window[0].seqNum
+    while i < numLoop
+        expectedAck = $window[0].seqNum
+        begin 
+            timeout(0.5) do   
                 packet = getPacket($socket)
                 i += 1
                 if(packet.type == 0 && packet.ackNum == expectedAck) 
@@ -131,11 +131,11 @@ def tx2(windowSize, destIP, currentSequenceNum)
                     end
                 end
             end
+        rescue Timeout::Error
+            puts "Timed out!"
+            $logger.info(Time.now.asctime + " Timed out!")
+            return acks
         end
-    rescue Timeout::Error
-        puts "Timed out!"
-        $logger.info(Time.now.asctime + " Timed out!")
-        return acks
     end
     return acks
 end
