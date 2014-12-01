@@ -97,7 +97,7 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     initialSequenceNum = 0
 
     $currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
-    while ((packetsSent = tx1(socket, port, destIP, networkIP, currentSequenceNum, numPackets, windowSize)) < numPackets)
+    while ((packetsSent = tx1(socket, port, destIP, networkIP, $currentSequenceNum, numPackets, windowSize)) < numPackets)
     end
     #send eot
     #sendPacket(socket, port, makePacket(destIP, 2, 0, 0), networkIP)
