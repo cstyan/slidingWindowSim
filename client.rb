@@ -143,7 +143,7 @@ def setup
     $clientIP = gets.chomp
     $socket.bind('', $port)
     $socket.connect($networkIP, $port)
-    $logFile = File.open('client.log', File::WRONLY | File::APPEND)
+    $logFile = File.open('client.log', File::WRONLY | File::APPEND | File::CREAT)
     $logger =Logger.new($logFile)
 end
 

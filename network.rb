@@ -36,7 +36,7 @@ network_1.bind('', $port)
 
 run = 1
 
-$logFile = File.open('network.log', File::WRONLY | File::APPEND)
+$logFile = File.open('network.log', File::WRONLY | File::APPEND | File::CREAT)
 $logger = Logger.new($logFile)
 
 while(run == 1)
