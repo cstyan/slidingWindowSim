@@ -35,6 +35,7 @@ $clientIP
 #outgoing IP of the local machine
 $localIP = UDPSocket.open{|s| s.connect("64.233.187.99", 1); s.addr.last}
 $numPackets = 0
+$acksRecv = 0
 $timeout
 $currentSequenceNum = 0
 $logFile
@@ -91,7 +92,7 @@ def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSi
         i += 1
     end
     packetsAcked = tx2(windowSize, destIP, currentSequenceNum)
-    return packetsAcked
+    $acksRecv += packetsAcked
 end
 
 #------------------------------------------------------------------------------------------------------------------
@@ -159,7 +160,7 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     packetsSent = 0
     initialSequenceNum = 0
     $currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
-    while($window.empty? != true)
+    while($acksRecv != $numPackets)
         puts "window size #{$window.size}"
         puts "currentSequenceNum #{$currentSequenceNum}"
         puts "numPackets #{$numPackets}"
