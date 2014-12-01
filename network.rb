@@ -41,7 +41,7 @@ $logFile = File.open('network.log', File::WRONLY | File::APPEND | File::CREAT)
 $logger = Logger.new($logFile)
 
 while(run == 1)
-	randomNum = rand(100)
+	randomNum = rand(1..100)
 	packet = getPacket(network_1)
 	if(randomNum > $pktpct)
 		sleep (0.05)
