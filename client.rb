@@ -15,25 +15,21 @@
 #--
 #--
 #-- NOTES:
-#-- A simple client emulation program for testing an unreliable network. The program
-#-- implements a sliding window protocol. 
-#--   
-#-- 
+#-- A simple UDP client emulation program for testing an unreliable network.
+#-- This applictation implements a sliding window protocol. 
 #----------------------------------------------------------------------------*/
 
 load 'packet.rb'
 require 'timeout'
 
-#queue for the window
-#technically it's an array because you can't
-#access queue elements using array.[num]
+#queue for the window, technically an array since accessing queue elements is not possible
 $window = Array.new
 #socket for sending/receiving
 $socket = UDPSocket.new
 $windowSize
 $port
 $networkIP
-#IP address of the other client
+#IP address of other client
 $clientIP
 #outgoing IP of the local machine
 $localIP = UDPSocket.open{|s| s.connect("64.233.187.99", 1); s.addr.last}
@@ -41,7 +37,17 @@ $numPackets = 0
 $currentSequenceNum = 0
 
 
-#generate the initial window
+#------------------------------------------------------------------------------------------------------------------
+#-- FUNCTION: genWindow
+#--
+#-- INTERFACE: genWindow(initNum, windowSize, destIp)
+#--              initNum: Initial sequence number 
+#--              windowSize: Window size to use for sending windows
+#--              destIP: IP Address for the destination
+#--
+#-- NOTES:
+#-- This function handles all the tasks for generating the initial window. 
+#----------------------------------------------------------------------------------------------------------------------
 def genWindow(initNum, windowSize, destIP)
     i = 1
     seqNum = initNum
@@ -57,7 +63,21 @@ def genWindow(initNum, windowSize, destIP)
     return seqNum + 1
 end
 
-#sends our entire current window
+#------------------------------------------------------------------------------------------------------------------
+#-- FUNCTION: tx1
+#--
+#-- INTERFACE: tx1(socket, port, destIP, networkIP, currentSequenceNum, numPackets, windowSize)
+#--              socket: Socket for the transfer of packet data
+#--              port: The port used for the sockets to connect
+#--              destIP: IP address for the destination
+#--              networkIP: IP address for the network emulator
+#--              currentSequenceNum: The current sequence number for sent packets
+#--              numPackets: Total number of packets needed to send for entire transfer
+#--              windowSize: Window size to use for sending windows
+#--
+#-- NOTES:
+#-- This function sends the entire current window
+#----------------------------------------------------------------------------------------------------------------------
 def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSize)
     i = 0
     puts "Sending window #{$window[0].seqNum} to #{$window[$windowSize - 1].seqNum}"
@@ -70,6 +90,17 @@ def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSi
     return packetsAcked
 end
 
+#------------------------------------------------------------------------------------------------------------------
+#-- FUNCTION: tx2
+#--
+#-- INTERFACE: tx2(windowSize, destIP, currentSequenceNum)
+#--              windowSize: Window size used for sending windows
+#--              destIP: IP address for destination
+#--              currentSequenceNum: The current sequence number for sent packets
+#--
+#-- NOTES:
+#-- This function waits for ACKs in the proper sequence then pushes the packet number to the queue.
+#----------------------------------------------------------------------------------------------------------------------
 def tx2(windowSize, destIP, currentSequenceNum)
     i = 1
     acks = 0
@@ -103,7 +134,21 @@ def tx2(windowSize, destIP, currentSequenceNum)
     end
     return acks
 end
-
+#------------------------------------------------------------------------------------------------------------------
+#-- FUNCTION: transmit
+#--
+#-- INTERFACE: transmit(socket, numPackets, windowSize, destIP, networkIP, port)
+#--              socket: Socket used for the transfer of packet data 
+#--              numPackets: Total number of packets needed to send for entire transfer
+#--              windowSize: Window size used for sending windows
+#--              destIP: IP address for destination
+#--              networkIP: IP address for the network emulator
+#--              port: The port used for the sockets to connect
+#--
+#-- NOTES:
+#-- This function generates the initial window and calls tx1 to transmit windows until
+#-- have sent packets and received acks for every packet sent
+#----------------------------------------------------------------------------------------------------------------------
 def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     packetsSent = 0
     initialSequenceNum = 0
@@ -115,6 +160,19 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     sendPacket(socket, port, makePacket(destIP, $localIP, 2, 0, 0), networkIP)
 end
 
+#------------------------------------------------------------------------------------------------------------------
+#-- FUNCTION: receive
+#--
+#-- INTERFACE: receive(recvIP, networkIP, socketA, port)
+#--              recvIP: IP address for receiving client
+#--              networkIP: IP address for the network emulator
+#--              socketA: Socket used for the transfer of packet data
+#--              port: The port used for the sockets to connect
+#--              
+#--
+#-- NOTES:
+#-- This function reads a packet thats received and sends corresponding ACK
+#----------------------------------------------------------------------------------------------------------------------
 def receive(recvIP, networkIP, socketA, port)
     run = 1
     while run == 1
@@ -125,6 +183,13 @@ def receive(recvIP, networkIP, socketA, port)
     puts "EOT received, ending receive function."
 end
 
+#------------------------------------------------------------------------------------------------------------------
+#-- FUNCTION: setup
+#--
+#-- NOTES:
+#-- This function handles the setup of the client application by asking the user to input
+#-- the window size, port, network IP, and client IP.
+#----------------------------------------------------------------------------------------------------------------------
 def setup   
     puts "Setup, please configure the application accordingly."
     puts "Enter the window size:"
