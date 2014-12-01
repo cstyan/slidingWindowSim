@@ -158,6 +158,9 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     packetsSent = 0
     initialSequenceNum = 0
     $currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
+    puts "window size #{$window.size}"
+    puts "currentSequenceNum #{$currentSequenceNum}"
+    puts "numPackets #{$numPackets}"
     while($window.size != 0 && $currentSequenceNum != $numPackets)
         tx1(socket, port, destIP, networkIP, $currentSequenceNum, $numPackets, windowSize)
     end
