@@ -115,11 +115,11 @@ def tx2(windowSize, destIP, currentSequenceNum)
         numLoop = $window.size
     end
     while i < numLoop
-        expectedAck = $window[0].seqNum
         begin 
             timeout($timeout) do   
                 packet = getPacket($socket)
                 i += 1
+                expectedAck = $window[0].seqNum
                 if(packet.type == 0 && packet.ackNum == expectedAck) 
                     lastSeqNum = $window[0].seqNum
                     $window.shift
