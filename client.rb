@@ -62,7 +62,7 @@ def genWindow(initNum, windowSize, destIP)
         puts $window[i - 1].data
 	i += 1
     end
-    return seqNum + 1
+    return seqNum
 end
 
 #------------------------------------------------------------------------------------------------------------------
