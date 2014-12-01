@@ -106,7 +106,7 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     end
     #send eot
     puts "Sending EOT"
-    sendPacket(socket, port, makePacket(destIP, 2, 0, 0), networkIP)
+    sendPacket(socket, port, makePacket(destIP, $localIP, 2, 0, 0), networkIP)
 end
 
 #frame recv'd
