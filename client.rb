@@ -167,6 +167,7 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     puts "Sending EOT"
     $logger.info(Time.now.asctime + " Sending EOT")
     sendPacket(socket, port, makePacket(destIP, $localIP, 2, 0, 0), networkIP)
+    $currentSequenceNum = 0
 end
 
 #------------------------------------------------------------------------------------------------------------------
