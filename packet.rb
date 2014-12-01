@@ -1,3 +1,28 @@
+#!/usr/bin/env ruby 
+
+#-----------------------------------------------------------------------------
+#-- SOURCE FILE:    packet.rb - A Packet Structure
+#--
+#-- PROGRAM:        UDP Sliding Window Simulator
+#--
+#-- FUNCTIONS:      
+#--                 def makePacket
+#--                 def getPacket
+#--                 def sendPacket
+#--
+#--
+#-- NOTES:
+#-- A simple client emulation program for testing servers. The program
+#-- implements the following features:
+#--     1. Ability to send variable length text strings to the server
+#--     2. Number of times to send these strings is user definable
+#--     3. Have the client maintain the connection for varying time durations
+#--     4. Keep track of how many requests it made to the server, amount of
+#--        data sent to the server, amount of time it took for the server to
+#--        respond2
+#--
+#----------------------------------------------------------------------------*/
+
 require 'socket'
 require 'bit-struct'
 
@@ -47,7 +72,6 @@ end
 
 def getPacket(socket)
 	packet = Packet.new
-    #shouldn't this be + 6?
 	size = 2048 + 5
 	begin
 		packet = Packet.new(socket.recvfrom_nonblock(size)[0])

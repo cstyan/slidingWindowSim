@@ -1,7 +1,28 @@
+#!/usr/bin/env ruby 
+
+#-----------------------------------------------------------------------------
+#-- SOURCE FILE:    client.rb - A UDP client
+#--
+#-- PROGRAM:        UDP Sliding Window Simulator
+#--
+#-- FUNCTIONS:      
+#--                 def genWindow
+#--                 def tx1
+#--                 def tx2
+#--                 def transmit
+#--                 def receive
+#--                 def setup
+#--
+#--
+#-- NOTES:
+#-- A simple client emulation program for testing an unreliable network. The program
+#-- implements a sliding window protocol. 
+#--   
+#-- 
+#----------------------------------------------------------------------------*/
+
 load 'packet.rb'
 require 'timeout'
-
-# ---Globals, cause they're cool---
 
 #queue for the window
 #technically it's an array because you can't
@@ -9,9 +30,6 @@ require 'timeout'
 $window = Array.new
 #socket for sending/receiving
 $socket = UDPSocket.new
-# $sIn = UDPSocket.new
-# #socket for sending
-# $sOut = UDPSocket.new
 $windowSize
 $port
 $networkIP
@@ -45,7 +63,6 @@ def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSi
     puts "Sending window #{$window[0].seqNum} to #{$window[$windowSize - 1].seqNum}"
     while i < $window.size
         packet = $window[i]
-        # sendPacket($socket, $port, makePacket(destIP, $localIP, 1, 0, 0), networkIP)
     	sendPacket($socket, $port, $window[i], networkIP)
         i += 1
     end
@@ -54,7 +71,6 @@ def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSi
 end
 
 def tx2(windowSize, destIP, currentSequenceNum)
-    #wait for acks in seq
     i = 1
     acks = 0
     numLoop = windowSize
@@ -65,11 +81,9 @@ def tx2(windowSize, destIP, currentSequenceNum)
     begin 
         timeout(0.5) do   
             while i < numLoop
-                #we expect to receive the ACK for the seqNum at the front of the queue
                 expectedAck = $window[0].seqNum
                 packet = getPacket($socket)
                 i += 1
-                #if the packet is an ack and the ackNum is the ack we're expecting
                 if(packet.type == 0 && packet.ackNum == expectedAck) 
                     lastSeqNum = $window[0].seqNum
                     $window.shift
@@ -81,7 +95,6 @@ def tx2(windowSize, destIP, currentSequenceNum)
                         $window.push(newPacket)
                     end
                 end
-            #if recv ack we expect, window.shift and push new packet to end
             end
         end
     rescue Timeout::Error
@@ -92,50 +105,24 @@ def tx2(windowSize, destIP, currentSequenceNum)
 end
 
 def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
-    #numer of packets sent and successfully ack'd
     packetsSent = 0
-    #used to generate new packets to put into window
-    #could be random if we want
     initialSequenceNum = 0
-
     $currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
-    # while ((packetsSent = tx1(socket, port, destIP, networkIP, $currentSequenceNum, numPackets, windowSize)) < numPackets)
-    # end
     while($window.size != 0 && $currentSequenceNum != $numPackets)
         tx1(socket, port, destIP, networkIP, $currentSequenceNum, $numPackets, windowSize)
     end
-    #send eot
     puts "Sending EOT"
     sendPacket(socket, port, makePacket(destIP, $localIP, 2, 0, 0), networkIP)
 end
 
-#frame recv'd
-# def rx1
-
-# end
-
-#check frame valid, send ACK
-# def rx2
-
-# end
-
-#is this function necessary?
 def receive(recvIP, networkIP, socketA, port)
     run = 1
     while run == 1
-        #read a packet from the socket
-        #rx1
         packet = getPacket($socket)
-        # if packet.type = 2
-        #     run = 0
-        #     next
-        # end
-        #rx2
-        #validate packet
         sendPacket($socket, port, makePacket(recvIP, $localIP, 0, 0, packet.seqNum), networkIP)
         puts "sent an ACK"
     end
-    puts "EOT received, ending receive function"
+    puts "EOT received, ending receive function."
 end
 
 def setup   
@@ -144,7 +131,7 @@ def setup
     $windowSize = gets.chomp.to_i
     puts "Enter a port:"
     $port = gets.chomp.to_i
-    puts "Please enter network IP:"
+    puts "Please enter the network IP:"
     $networkIP = gets.chomp
     puts "Please enter the client IP:"
     $clientIP = gets.chomp
@@ -154,19 +141,18 @@ end
 
 setup
 
-#main script
 run = 1
 while(run == 1)
     continue = 1
 
-    puts "Enter program state, 1 for SEND or 2 for RECEIVE:"
+    puts "Enter program state, 1 for SEND or 2 for RECEIVE: "
     state = gets.chomp
     
     if(state.to_i == 1)
         valid = 0
         num = 0
         while(valid == 0)
-            puts "Enter the number of packets you want to send"
+            puts "Enter the number of packets you want to send: "
             $numPackets = gets.chomp.to_i
             if($numPackets < $windowSize)
                 next
@@ -181,4 +167,4 @@ while(run == 1)
     end
 end
 
-puts "done"
+puts "Done."
