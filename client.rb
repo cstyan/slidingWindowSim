@@ -158,7 +158,7 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     packetsSent = 0
     initialSequenceNum = 0
     $currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
-    while($window.size != 0 && $currentSequenceNum != $numPackets)
+    while($window.size != 0)
         puts "window size #{$window.size}"
         puts "currentSequenceNum #{$currentSequenceNum}"
         puts "numPackets #{$numPackets}"
