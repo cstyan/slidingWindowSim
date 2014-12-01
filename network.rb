@@ -47,10 +47,10 @@ while(run == 1)
 		sleep (0.05)
 		sendPacket(network_1, $port, packet)
 
-		if(packet.type = 1)
+		if(packet.type == 1)
 			puts "Data packet #{packet.seqNum} forwarded."
 			$logger.info(Time.now.asctime + " Data packet #{packet.seqNum} forwarded.")
-		elsif(packet.type = 0)
+		elsif(packet.type == 0)
 			puts "ACK packet #{packet.ackNum} forwarded."
 			$logger.info(Time.now.asctime + " ACK packet #{packet.ackNum} forwarded.")
 		else
@@ -58,10 +58,10 @@ while(run == 1)
 			$logger.info(Time.now.asctime + " EOT packet forwarded.")
 		end
 	else
-		if(packet.type = 1)
+		if(packet.type == 1)
 			puts "Data packet #{packet.seqNum} dropped."
 			$logger.info(Time.now.asctime + " Data packet #{packet.seqNum} dropped.")
-		elsif(packet.type = 0)
+		elsif(packet.type == 0)
 			puts "ACK packet #{packet.ackNum} dropped."
 			$logger.info(Time.now.asctime + " ACK packet #{packet.ackNum} dropped.")
 		else
