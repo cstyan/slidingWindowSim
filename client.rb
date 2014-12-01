@@ -115,7 +115,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
     while i < numLoop
         expectedAck = $window[0].seqNum
         begin 
-            timeout(0.5) do   
+            timeout($timeout) do   
                 packet = getPacket($socket)
                 i += 1
                 if(packet.type == 0 && packet.ackNum == expectedAck) 
@@ -223,7 +223,7 @@ def setup
     $networkIP = gets.chomp
     puts "Please enter the client IP:"
     $clientIP = gets.chomp
-    puts "Please enter the timeout:"
+    puts "Please enter the timeout (recv):"
     $timeout = gets.chomp.to_f
     $socket.bind('', $port)
     $socket.connect($networkIP, $port)
