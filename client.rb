@@ -62,7 +62,7 @@ end
 def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSize)
     i = 0
     puts "Sending window #{$window[0].seqNum} to #{$window[$windowSize - 1].seqNum}"
-    $logger.info(Time.now + " Sending window #{$window[0].seqNum} to #{$window[$windowSize - 1].seqNum}")
+    $logger.info(Time.now.asctime + " Sending window #{$window[0].seqNum} to #{$window[$windowSize - 1].seqNum}")
     while i < $window.size
         packet = $window[i]
     	sendPacket($socket, $port, $window[i], networkIP)
@@ -92,7 +92,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
                     if($currentSequenceNum != $numPackets)
                         newPacket = makePacket(destIP, $localIP, 1, $currentSequenceNum, 0)
                         puts "Pushing packet num #{$currentSequenceNum} to the queue"
-                        $logger.info(Time.now + " Pushing packet num #{$currentSequenceNum} to the queue")
+                        $logger.info(Time.now.asctime + " Pushing packet num #{$currentSequenceNum} to the queue")
                         $currentSequenceNum += 1
                         acks += 1
                         $window.push(newPacket)
@@ -102,7 +102,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
         end
     rescue Timeout::Error
         puts "Timed out!"
-        $logger.info(Time.now + " Timed out!")
+        $logger.info(Time.now.asctime + " Timed out!")
         return acks
     end
     return acks
@@ -116,7 +116,7 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
         tx1(socket, port, destIP, networkIP, $currentSequenceNum, $numPackets, windowSize)
     end
     puts "Sending EOT"
-    $logger.info(Time.now + " Sending EOT")
+    $logger.info(Time.now.asctime + " Sending EOT")
     sendPacket(socket, port, makePacket(destIP, $localIP, 2, 0, 0), networkIP)
 end
 
@@ -126,10 +126,10 @@ def receive(recvIP, networkIP, socketA, port)
         packet = getPacket($socket)
         sendPacket($socket, port, makePacket(recvIP, $localIP, 0, 0, packet.seqNum), networkIP)
         puts "sent an ACK"
-        $logger.info(Time.now + " sent an ACK")
+        $logger.info(Time.now.asctime + " sent an ACK")
     end
     puts "EOT received, ending receive function."
-    $logger.info(Time.now + " EOT received, ending receive function")
+    $logger.info(Time.now.asctime + " EOT received, ending receive function")
 end
 
 def setup   

@@ -49,24 +49,24 @@ while(run == 1)
 
 		if(packet.type = 1)
 			puts "Data packet #{packet.seqNum} forwarded."
-			$logger.info(Time.now + " Data packet #{packet.seqNum} forwarded.")
+			$logger.info(Time.now.asctime + " Data packet #{packet.seqNum} forwarded.")
 		elsif(packet.type = 0)
 			puts "ACK packet #{packet.ackNum} forwarded."
-			$logger.info(Time.now + " ACK packet #{packet.ackNum} forwarded.")
+			$logger.info(Time.now.asctime + " ACK packet #{packet.ackNum} forwarded.")
 		else
 			puts "EOT packet forwarded."
-			$logger.info(Time.now + " EOT packet forwarded.")
+			$logger.info(Time.now.asctime + " EOT packet forwarded.")
 		end
 	else
 		if(packet.type = 1)
 			puts "Data packet #{packet.seqNum} dropped."
-			$logger.info(Time.now + " Data packet #{packet.seqNum} dropped.")
+			$logger.info(Time.now.asctime + " Data packet #{packet.seqNum} dropped.")
 		elsif(packet.type = 0)
 			puts "ACK packet #{packet.ackNum} dropped."
-			$logger.info(Time.now + " ACK packet #{packet.ackNum} dropped.")
+			$logger.info(Time.now.asctime + " ACK packet #{packet.ackNum} dropped.")
 		else
 			puts "EOT packet dropped."
-			$logger.info(Time.now + " EOT packet dropped.")
+			$logger.info(Time.now.asctime + " EOT packet dropped.")
 		end
 	end
 end
