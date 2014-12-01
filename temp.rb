@@ -20,6 +20,8 @@ $clientIP
 #outgoing IP of the local machine
 $localIP = UDPSocket.open{|s| s.connect("64.233.187.99", 1); s.addr.last}
 
+$currentSequenceNum = 0
+
 
 #generate the initial window
 def genWindow(initNum, windowSize, destIP)
@@ -71,9 +73,9 @@ def tx2(windowSize, destIP, currentSequenceNum)
                 if(packet.type == 0 && packet.ackNum == expectedAck) 
                     lastSeqNum = $window[0].seqNum
                     $window.shift
-                    newPacket = makePacket(destIP, $localIP, 1, currentSequenceNum, 0)
+                    newPacket = makePacket(destIP, $localIP, 1, $currentSequenceNum, 0)
                     puts "Pushing packet num #{currentSequenceNum} to the queue"
-                    currentSequenceNum += 1
+                    $currentSequenceNum += 1
                     acks += 1
                     $window.push(newPacket)
                 end
@@ -94,7 +96,7 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     #could be random if we want
     initialSequenceNum = 0
 
-    currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
+    $currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
     while ((packetsSent = tx1(socket, port, destIP, networkIP, currentSequenceNum, numPackets, windowSize)) < numPackets)
     end
     #send eot
