@@ -166,6 +166,10 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
         tx1(socket, port, destIP, networkIP, $currentSequenceNum, $numPackets, windowSize)
         puts "after transmit currentSequenceNum #{$currentSequenceNum}"
         puts "after transmit window.size #{$window.size}"
+        #end damn you
+        if($currentSequenceNum == $numPackets)
+            break
+        end
     end
     puts "Sending EOT"
     $logger.info(Time.now.asctime + " Sending EOT")
