@@ -35,6 +35,7 @@ $clientIP
 #outgoing IP of the local machine
 $localIP = UDPSocket.open{|s| s.connect("64.233.187.99", 1); s.addr.last}
 $numPackets = 0
+$timeout
 $currentSequenceNum = 0
 $logFile
 $logger
@@ -180,8 +181,22 @@ end
 #----------------------------------------------------------------------------------------------------------------------
 def receive(recvIP, networkIP, socketA, port)
     run = 1
+    useTimer = 0
+    packet = Packet.new
     while run == 1
-        packet = getPacket($socket)
+        if(useTimer == 0)
+            packet = getPacket($socket)
+            useTimer = 1
+        else
+            begin
+                timeout(10) do
+                    packet = getPacket($socket)
+                end
+            rescue Timeout::Error
+                puts "Timed out!"
+                $logger.info(Time.now.asctime + " Timed out!")
+            end
+        end
         sendPacket($socket, port, makePacket(recvIP, $localIP, 0, 0, packet.seqNum), networkIP)
         puts "sent an ACK"
         $logger.info(Time.now.asctime + " sent an ACK")
@@ -207,6 +222,8 @@ def setup
     $networkIP = gets.chomp
     puts "Please enter the client IP:"
     $clientIP = gets.chomp
+    puts "Please enter the timeout:"
+    $timeout = gets.chomp.to_f
     $socket.bind('', $port)
     $socket.connect($networkIP, $port)
     $logFile = File.open('client.log', File::WRONLY | File::APPEND | File::CREAT)
