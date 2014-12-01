@@ -12,15 +12,8 @@
 #--
 #--
 #-- NOTES:
-#-- A simple client emulation program for testing servers. The program
-#-- implements the following features:
-#--     1. Ability to send variable length text strings to the server
-#--     2. Number of times to send these strings is user definable
-#--     3. Have the client maintain the connection for varying time durations
-#--     4. Keep track of how many requests it made to the server, amount of
-#--        data sent to the server, amount of time it took for the server to
-#--        respond2
-#--
+#-- This source file contains the packet structure and functions for generating, 
+#--	sending and receiving packets based on our protocol and packet function.
 #----------------------------------------------------------------------------*/
 
 require 'socket'
@@ -35,20 +28,19 @@ class Packet < BitStruct
 	unsigned	:ackNum,	16
 	rest		:data
 end
-
-# ==============================================================
-# makePacket - Creates a Packet structure and fill it with data
-# Takes in the following values:
-# destIP - IP address of the destination host
-# sourceIP - IP address of the source host
-# type - int value between 0 and 2 (0 = ack, 1 = data, 2 = EOT)
-# seqNum - Sequence Number
-# ackNum - Acknowledgement Number
-# data - Body content of the packet
-#
-# returns a Packet struct
-# ==============================================================
-
+#------------------------------------------------------------------------------------------------------------------
+#-- FUNCTION: makePacket
+#--
+#-- INTERFACE: makePacket(destIP, sourceIP, type, seqNum, ackNum)
+#--              destIP: IP address for the destination host
+#--				 sourceIP: IP address for the source host
+#--              type: type of data(either a packet, ACK, of EOT)
+#--				 seqNum: Sequence number of sent packets
+#--				 ackNum: ACK number of sent packets
+#--
+#-- NOTES:
+#-- This function creats a packet structure and fills it with data. It returns a complete packet struct
+#----------------------------------------------------------------------------------------------------------------------
 def makePacket(destIP, sourceIP, type, seqNum, ackNum)
 	packet = Packet.new
 
@@ -70,9 +62,18 @@ def makePacket(destIP, sourceIP, type, seqNum, ackNum)
 	return packet
 end
 
+#------------------------------------------------------------------------------------------------------------------
+#-- FUNCTION: getPacket
+#--
+#-- INTERFACE: getPacket(socket)
+#--              Socket: socket for the transfer of data
+#--
+#-- NOTES:
+#-- This function reads a packet from the socket
+#----------------------------------------------------------------------------------------------------------------------
 def getPacket(socket)
 	packet = Packet.new
-	size = 2048 + 5
+	size = 2048 + 6
 	begin
 		packet = Packet.new(socket.recvfrom_nonblock(size)[0])
 	rescue Errno::EAGAIN
@@ -83,8 +84,18 @@ def getPacket(socket)
 	return packet
 end
 
-#if the array networkIP is empty then it calls
-#a different version of the send function
+#------------------------------------------------------------------------------------------------------------------
+#-- FUNCTION: sendPacket
+#--
+#-- INTERFACE: sendPacket(socket, port, packet, *networkIP)
+#--              socket: Socket used for the transfer of data
+#--				 port: Port used for sockets to connect
+#--              packet: Packet to send to host
+#--				 *networkIP: IP address of network
+#--
+#-- NOTES:
+#-- This function sends the packet after checking if the networkIP is empty
+#----------------------------------------------------------------------------------------------------------------------
 def sendPacket(socket, port, packet, *networkIP)
     if(networkIP.size == 0)
         socket.send(packet, 0, packet.destIP.to_s, port)
