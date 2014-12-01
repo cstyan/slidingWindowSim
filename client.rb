@@ -114,7 +114,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
     if($window.size < windowSize)
         numLoop = $window.size
     end
-    while i < numLoop
+    while i <= numLoop
         begin 
             timeout($timeout) do   
                 packet = getPacket($socket)
