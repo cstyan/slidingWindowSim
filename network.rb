@@ -12,7 +12,10 @@
 #-- 
 #-- There is also a "noise" component that is included which randomly discards
 #-- packets(and ACKs) to acheive a user specified bit error rate that is given 
-#-- as a command line argument. 
+#-- as a command line argument. Dropping of the packet is done by generating a
+#-- random number between 1-100, if the number is greater than the entered rate
+#-- then the packet is dropped.  This means that every packet has the same chance
+#-- to be dropped as every other packet.
 #-- 
 #-- This network module also takes arguements for BER(Bit Error Rate), 
 #-- average delay per packet, and IP addresses and port numbers for the
@@ -26,6 +29,7 @@ $port = gets.chomp.to_i
 puts "Enter a percentage of packets to be dropped: "
 $pktpct = gets.chomp.to_i
 puts "Enter the delay in seconds (0.05) "
+$delay = gets.chomp.to_i
 
 network_1 = UDPSocket.new
 network_1.bind('', $port)
@@ -37,7 +41,7 @@ while(run == 1)
 	packet = getPacket(network_1)
 	puts packet.data
 	if(randomNum > $pktpct)
-		sleep (0.01)
+		sleep ($delay)
 		sendPacket(network_1, $port, packet)
 	else
 		puts "Packet dropped."
