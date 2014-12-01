@@ -195,6 +195,7 @@ def receive(recvIP, networkIP, socketA, port)
             rescue Timeout::Error
                 puts "Timed out!"
                 $logger.info(Time.now.asctime + " Timed out!")
+                return
             end
         end
         sendPacket($socket, port, makePacket(recvIP, $localIP, 0, 0, packet.seqNum), networkIP)
