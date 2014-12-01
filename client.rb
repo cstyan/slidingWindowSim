@@ -130,6 +130,7 @@ def tx2(windowSize, destIP, currentSequenceNum)
                         $currentSequenceNum += 1
                         $window.push(newPacket)
                     end
+                    $logger.info(Time.now.asctime + " expected ack #{$expectedAck} ack we got #{packet.ackNum}")
                     acks += 1
                 end
             end
