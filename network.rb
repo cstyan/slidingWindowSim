@@ -36,14 +36,36 @@ network_1.bind('', $port)
 
 run = 1
 
+$logFile = File.open('network.log', File::WRONLY | File::APPEND)
+$logger = Logger.new($logFile)
+
 while(run == 1)
 	randomNum = rand(100)
 	packet = getPacket(network_1)
-	puts packet.data
 	if(randomNum > $pktpct)
 		sleep ($delay)
 		sendPacket(network_1, $port, packet)
+
+		if(packet.type = 1)
+			puts "Data packet #{packet.seqNum} forwarded."
+			$logger.info(Time.now + " Data packet #{packet.seqNum} forwarded.")
+		elsif(packet.type = 0)
+			puts "ACK packet #{packet.ackNum} forwarded."
+			$logger.info(Time.now + " ACK packet #{packet.ackNum} forwarded.")
+		else
+			puts "EOT packet forwarded."
+			$logger.info(Time.now + " EOT packet forwarded.")
+		end
 	else
-		puts "Packet dropped."
+		if(packet.type = 1)
+			puts "Data packet #{packet.seqNum} dropped."
+			$logger.info(Time.now + " Data packet #{packet.seqNum} dropped.")
+		elsif(packet.type = 0)
+			puts "ACK packet #{packet.ackNum} dropped."
+			$logger.info(Time.now + " ACK packet #{packet.ackNum} dropped.")
+		else
+			puts "EOT packet dropped."
+			$logger.info(Time.now + " EOT packet dropped.")
+		end
 	end
 end
