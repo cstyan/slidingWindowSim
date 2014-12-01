@@ -191,6 +191,7 @@ def receive(recvIP, networkIP, socketA, port)
             begin
                 timeout(10) do
                     packet = getPacket($socket)
+                    if(packet.type == 2)
                 end
             rescue Timeout::Error
                 puts "Timed out!"
@@ -198,7 +199,7 @@ def receive(recvIP, networkIP, socketA, port)
                 return
             end
         end
-        sendPacket($socket, port, makePacket(recvIP, $localIP, 0, 0, packet.seqNum), networkIP)
+        sendPacket($socket, port, makePacket(recvIP, $localIP, 1, 0, packet.seqNum), networkIP)
         puts "sent an ACK"
         $logger.info(Time.now.asctime + " sent an ACK")
     end
