@@ -163,6 +163,7 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     while($acksRecv != $numPackets)
         tx1(socket, port, destIP, networkIP, $currentSequenceNum, $numPackets, windowSize)
         puts "acks recv'd #{$acksRecv}"
+        $logger.info(Time.now.asctime + " acks recv'd #{$acksRecv}")
     end
     puts "Sending EOT"
     $logger.info(Time.now.asctime + " Sending EOT")
