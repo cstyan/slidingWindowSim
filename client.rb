@@ -84,7 +84,7 @@ def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSi
     i = 0
     size = $window.size
     puts "Sending window #{$window[0].seqNum} to #{$window[size - 1].seqNum}"
-    $logger.info(Time.now.asctime + " Sending window #{$window[0].seqNum} to #{$window[$windowSize - 1].seqNum}")
+    $logger.info(Time.now.asctime + " Sending window #{$window[0].seqNum} to #{$window[size - 1].seqNum}")
     while i < $window.size
         packet = $window[i]
     	sendPacket($socket, $port, $window[i], networkIP)
