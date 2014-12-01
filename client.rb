@@ -128,9 +128,9 @@ def tx2(windowSize, destIP, currentSequenceNum)
                         puts "Pushing packet num #{$currentSequenceNum} to the queue"
                         $logger.info(Time.now.asctime + " Pushing packet num #{$currentSequenceNum} to the queue")
                         $currentSequenceNum += 1
-                        acks += 1
                         $window.push(newPacket)
                     end
+                    acks += 1
                 end
             end
         rescue Timeout::Error
