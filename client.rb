@@ -206,8 +206,8 @@ def receive(recvIP, networkIP, socketA, port)
             end
         end
         sendPacket($socket, port, makePacket(recvIP, $localIP, 0, 0, packet.seqNum), networkIP)
-        puts "sent an ACK"
-        $logger.info("sent an ACK")
+        puts "sent ACK #{packet.seqNum}"
+        $logger.info("sent ACK #{packet.seqNum}")
     end
     puts "EOT received, ending receive function."
     $logger.info("EOT received, ending receive function")

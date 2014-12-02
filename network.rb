@@ -31,6 +31,7 @@ puts "Enter a percentage of packets to be dropped: "
 $pktpct = gets.chomp.to_i
 puts "Enter the delay in seconds (0.05) "
 $delay = gets.chomp.to_f
+puts $delay
 
 network_1 = UDPSocket.new
 network_1.bind('', $port)
@@ -47,7 +48,7 @@ while(run == 1)
 	randomNum = rand(1..100)
 	packet = getPacket(network_1)
 	if(randomNum > $pktpct)
-		sleep (0.05)
+		sleep($delay)
 		sendPacket(network_1, $port, packet)
 
 		if(packet.type == 1)
