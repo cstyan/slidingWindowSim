@@ -39,6 +39,9 @@ run = 1
 
 $logFile = File.open('network.log', File::WRONLY | File::APPEND | File::CREAT)
 $logger = Logger.new($logFile)
+$logger.formatter = proc do |severity, datetime, progname, msg|
+	"#{datetime}: #{msg}\n"
+end
 
 while(run == 1)
 	randomNum = rand(1..100)
@@ -49,24 +52,24 @@ while(run == 1)
 
 		if(packet.type == 1)
 			puts "Data packet #{packet.seqNum} forwarded."
-			$logger.info(Time.now.asctime + " Data packet #{packet.seqNum} forwarded.")
+			$logger.info("Data packet #{packet.seqNum} forwarded.")
 		elsif(packet.type == 0)
 			puts "ACK packet #{packet.ackNum} forwarded."
-			$logger.info(Time.now.asctime + " ACK packet #{packet.ackNum} forwarded.")
+			$logger.info("ACK packet #{packet.ackNum} forwarded.")
 		else
 			puts "EOT packet forwarded."
-			$logger.info(Time.now.asctime + " EOT packet forwarded.")
+			$logger.info("EOT packet forwarded.")
 		end
 	else
 		if(packet.type == 1)
 			puts "Data packet #{packet.seqNum} dropped."
-			$logger.info(Time.now.asctime + " Data packet #{packet.seqNum} dropped.")
+			$logger.info("Data packet #{packet.seqNum} dropped.")
 		elsif(packet.type == 0)
 			puts "ACK packet #{packet.ackNum} dropped."
-			$logger.info(Time.now.asctime + " ACK packet #{packet.ackNum} dropped.")
+			$logger.info("ACK packet #{packet.ackNum} dropped.")
 		else
 			puts "EOT packet dropped."
-			$logger.info(Time.now.asctime + " EOT packet dropped.")
+			$logger.info("EOT packet dropped.")
 		end
 	end
 end

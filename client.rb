@@ -85,7 +85,7 @@ def tx1(socket, port, destIP, networkIP,currentSequenceNum, numPackets, windowSi
     i = 0
     size = $window.size
     puts "Sending window #{$window[0].seqNum} to #{$window[size - 1].seqNum}"
-    $logger.info(Time.now.asctime + " Sending window #{$window[0].seqNum} to #{$window[size - 1].seqNum}")
+    $logger.info("Sending window #{$window[0].seqNum} to #{$window[size - 1].seqNum}")
     while i < $window.size
         packet = $window[i]
     	sendPacket($socket, $port, $window[i], networkIP)
@@ -126,17 +126,17 @@ def tx2(windowSize, destIP, currentSequenceNum)
                     if($currentSequenceNum != $numPackets)
                         newPacket = makePacket(destIP, $localIP, 1, $currentSequenceNum, 0)
                         puts "Pushing packet num #{$currentSequenceNum} to the queue"
-                        $logger.info(Time.now.asctime + " Pushing packet num #{$currentSequenceNum} to the queue")
+                        $logger.info("Pushing packet num #{$currentSequenceNum} to the queue")
                         $currentSequenceNum += 1
                         $window.push(newPacket)
                     end
-                    $logger.info(Time.now.asctime + " expected ack #{expectedAck} ack we got #{packet.ackNum}")
+                    $logger.info("expected ack #{expectedAck} ack we got #{packet.ackNum}")
                     acks += 1
                 end
             end
         rescue Timeout::Error
             puts "Timed out!"
-            $logger.info(Time.now.asctime + " Timed out!")
+            $logger.info("Timed out!")
             return acks
         end
     end
@@ -163,11 +163,9 @@ def transmit(socket, numPackets, windowSize, destIP, networkIP, port)
     $currentSequenceNum = genWindow(initialSequenceNum, windowSize, destIP)
     while($acksRecv != $numPackets)
         tx1(socket, port, destIP, networkIP, $currentSequenceNum, $numPackets, windowSize)
-        puts "acks recv'd #{$acksRecv}"
-        $logger.info(Time.now.asctime + " acks recv'd #{$acksRecv}")
     end
     puts "Sending EOT"
-    $logger.info(Time.now.asctime + " Sending EOT")
+    $logger.info("Sending EOT")
     sendPacket(socket, port, makePacket(destIP, $localIP, 2, 0, 0), networkIP)
     $currentSequenceNum = 0
 end
@@ -203,16 +201,16 @@ def receive(recvIP, networkIP, socketA, port)
                 end
             rescue Timeout::Error
                 puts "Timed out!"
-                $logger.info(Time.now.asctime + " Timed out!")
+                $logger.info("Timed out!")
                 return
             end
         end
         sendPacket($socket, port, makePacket(recvIP, $localIP, 0, 0, packet.seqNum), networkIP)
         puts "sent an ACK"
-        $logger.info(Time.now.asctime + " sent an ACK")
+        $logger.info("sent an ACK")
     end
     puts "EOT received, ending receive function."
-    $logger.info(Time.now.asctime + " EOT received, ending receive function")
+    $logger.info("EOT received, ending receive function")
 end
 
 #------------------------------------------------------------------------------------------------------------------
@@ -238,6 +236,9 @@ def setup
     $socket.connect($networkIP, $port)
     $logFile = File.open('client.log', File::WRONLY | File::APPEND | File::CREAT)
     $logger =Logger.new($logFile)
+    $logger.formatter = proc do |severity, datetime, progname, msg|
+        "#{datetime}: #{msg}\n"
+    end
 end
 
 setup
