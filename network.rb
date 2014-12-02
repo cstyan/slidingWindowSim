@@ -31,7 +31,6 @@ puts "Enter a percentage of packets to be dropped: "
 $pktpct = gets.chomp.to_i
 puts "Enter the delay in seconds (0.05) "
 $delay = gets.chomp.to_f
-puts $delay
 
 network_1 = UDPSocket.new
 network_1.bind('', $port)
